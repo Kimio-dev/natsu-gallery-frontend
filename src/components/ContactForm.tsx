@@ -48,7 +48,7 @@ const ContactForm: React.FC = () => {
     setIsError(false); // エラー状態をリセット
 
     try {
-      const response = await fetch('http://localhost:5000/api/contact', { // バックエンドのURLを指定
+      const response = await fetch('https://natsu-gallery-backend.onrender.com', { // バックエンドのURLを指定
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
