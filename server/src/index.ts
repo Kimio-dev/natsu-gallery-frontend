@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000; // 環境変数からポートを取得�
 
 // CORSの設定
 const corsOptions = {
-  origin: 'http://localhost:5173', // フロントエンドのVite開発サーバーのポート
+  origin: 'https://natsu-gallery-backend.onrender.com', // フロントエンドのVite開発サーバーのポート
   optionsSuccessStatus: 200 // 古いブラウザのための設定
 };
 app.use(cors(corsOptions));
