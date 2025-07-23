@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { sweetImages } from '../data/sweets';
 
 interface BackgroundGridProps {
@@ -43,7 +43,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   const mobileNumCols = 4;
   const mobileItemWidth = 80;  // 横80px
   const mobileItemHeight = 240; // 縦240px
-  const mobileGapSize = 16; // モバイル向けにギャップを小さく調整 (80*4 + 16*3 = 368px)
+  const mobileGapSize = 16; // モバイル向けにギャップを小さく調整
 
   const mobileSingleGridHeight = mobileNumRows * mobileItemHeight + (mobileNumRows - 1) * mobileGapSize;
   const mobileGridContainerWidth = mobileNumCols * mobileItemWidth + (mobileNumCols - 1) * mobileGapSize;
@@ -60,7 +60,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   // グリッドアイテムのデータを準備
   const items = useMemo(() => {
     const allItems = [];
-    // モバイルは全画像（20枚）、PCも全画像（19枚 + 1繰り返し）
+    // モバイルもPCも全画像（19枚 + 1繰り返し）
     const imagesToUse = sweetImages; 
 
     for (let i = 0; i < imagesToUse.length; i++) {
@@ -80,7 +80,51 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
       });
     }
     return allItems;
-  }, [isMobile, currentNumRows, currentNumCols]); // isMobile, currentNumRows, currentNumCols を依存配列に追加
+  }, [isMobile, currentNumRows, currentNumCols]);
+
+  // Intersection Observer 用の ref を管理する Map (モバイル版のみ使用)
+  const imageRefs = useRef(new Map<string, HTMLImageElement>());
+
+  // Intersection Observer のコールバック関数 (モバイル版のみ使用)
+  const handleIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement;
+        if (img && img.dataset.src) {
+          img.src = img.dataset.src;
+          if (img.dataset.srcset) {
+            img.srcset = img.dataset.srcset;
+          }
+          img.removeAttribute('data-src');
+          img.removeAttribute('data-srcset');
+          (entry.target as any)._observer.unobserve(entry.target);
+        }
+      }
+    });
+  }, []);
+
+  // Intersection Observer の設定とクリーンアップ (モバイル版のみ使用)
+  useEffect(() => {
+    if (!isMobile) return; // PC版ではIOを使用しない
+
+    const observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      // rootMargin をさらに広げ、ビューポート外の広い範囲で読み込みを開始
+      rootMargin: '1000px 1000px 1000px 1000px', // 上下左右1000px手前で読み込み開始
+      threshold: 0,
+    });
+
+    imageRefs.current.forEach(img => {
+      if (img) {
+        observer.observe(img);
+        (img as any)._observer = observer;
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [handleIntersect, items, isMobile]); // isMobile を依存配列に追加
 
   // メインコンテナのスタイル
   const mainContainerStyle: React.CSSProperties = isMobile ? {
@@ -99,7 +143,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
     '--animation-delay': pcInitialAnimationDelay,
     '--scroll-height': `${pcAnimationScrollHeight}px`,
     willChange: 'transform',
-  } as React.CSSProperties; // 型アサーション
+  } as React.CSSProperties;
 
   return (
     <div className={`fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden perspective-1000 ${className || ''}`}>
@@ -121,6 +165,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
             {items.map(({ id, sweetData }) => (
               <div
                 key={`${cloneIndex}-${id}`}
+                // ここが重要: 画像が読み込まれるまで親divの背景色を表示し、画像とdivのサイズを合わせる
                 className={`rounded-lg bg-gray-800 shadow-lg flex items-center justify-center`}
                 style={{
                   width: `${currentItemWidth}px`,
@@ -129,13 +174,31 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
               >
                 {sweetData && (
                   <picture>
-                    <source srcSet={sweetData.webp} type="image/webp" />
+                    <source 
+                      srcSet={isMobile ? undefined : sweetData.webp} // PC版のみsrcSetを直接指定
+                      data-srcset={isMobile ? sweetData.webp : undefined} // モバイル版のみdata-srcsetを使用
+                      type="image/webp" 
+                    />
                     <img
-                      src={sweetData.webp} // 直接webpパスを指定
+                      // モバイル版は透明なGIFプレースホルダー、PC版は直接webpパス
+                      src={isMobile ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : sweetData.webp}
+                      // モバイル版のみdata-srcを使用
+                      data-src={isMobile ? sweetData.webp : undefined}
                       alt={sweetData.alt}
                       className="w-full h-full object-cover rounded-lg"
-                      loading={isMobile ? 'eager' : 'lazy'} // モバイルはeager、PCはlazy
-                      decode="async" // 非同期デコードは両方で維持
+                      // モバイル版はIOで制御するためloading属性なし、PC版はlazy
+                      loading={isMobile ? undefined : 'lazy'} 
+                      decode="async" 
+                      ref={el => {
+                        // モバイル版のみrefをセット
+                        if (isMobile) {
+                          if (el) {
+                            imageRefs.current.set(`${cloneIndex}-${id}`, el);
+                          } else {
+                            imageRefs.current.delete(`${cloneIndex}-${id}`);
+                          }
+                        }
+                      }}
                     />
                   </picture>
                 )}
