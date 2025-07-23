@@ -16,7 +16,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   const gridContainerWidth = numCols * itemWidth + (numCols - 1) * gapSize;
 
   // アニメーションのクローン数は5のまま維持（DOM要素数削減のため）
-  const numberOfClones = 2; 
+  const numberOfClones = 1; 
   const animationScrollHeight = singleGridHeight + gapSize; 
 
   // グリッドアイテムのデータを準備
@@ -33,7 +33,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
     return allItems;
   }, [numRows, numCols]);
 
-  const baseSpeedPer100Px = 15;
+  const baseSpeedPer100Px = 25;
   const animationDuration = `${(animationScrollHeight / 100) * baseSpeedPer100Px}s`; 
   const initialAnimationDelay = `0s`; 
 
