@@ -39,11 +39,11 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   const pcInitialAnimationDelay = `0s`; 
 
   // --- モバイル版の設定 ---
-  const mobileNumRows = 3; // 12枚の画像を表示するために調整 (4列 * 3行 = 12)
+  const mobileNumRows = 5; // 20枚の画像を表示するために調整 (4列 * 5行 = 20)
   const mobileNumCols = 4;
   const mobileItemWidth = 80;  // 横80px
-  const mobileItemHeight = 160; // 縦160px
-  const mobileGapSize = 24; // モバイル向けにギャップを小さく調整
+  const mobileItemHeight = 240; // 縦240px
+  const mobileGapSize = 16; // モバイル向けにギャップを小さく調整 (80*4 + 16*3 = 368px)
 
   const mobileSingleGridHeight = mobileNumRows * mobileItemHeight + (mobileNumRows - 1) * mobileGapSize;
   const mobileGridContainerWidth = mobileNumCols * mobileItemWidth + (mobileNumCols - 1) * mobileGapSize;
@@ -60,7 +60,8 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   // グリッドアイテムのデータを準備
   const items = useMemo(() => {
     const allItems = [];
-    const imagesToUse = isMobile ? sweetImages.slice(0, 12) : sweetImages; // モバイルは12枚、PCは全画像
+    // モバイルは全画像（20枚）、PCも全画像（19枚 + 1繰り返し）
+    const imagesToUse = sweetImages; 
 
     for (let i = 0; i < imagesToUse.length; i++) {
       const sweet = imagesToUse[i];
@@ -70,7 +71,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
       });
     }
 
-    // グリッドのマス数に合わせて画像を繰り返して埋める (モバイル版のみ影響)
+    // グリッドのマス数に合わせて画像を繰り返して埋める
     const totalGridCells = currentNumRows * currentNumCols;
     while (allItems.length < totalGridCells) {
       allItems.push({
@@ -89,9 +90,8 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
     transform: 'rotateY(-20deg) rotateX(45deg)', // モバイル版の3D変換
     transformOrigin: 'center center',
     // モバイルで画面全体に収まるように、必要に応じてscaleを調整
-    // 例えば、iPhone SE (375px) で横幅 392px (80*4 + 24*3) は少しはみ出すため、縮小する
-    // 画面幅に応じて動的に調整することも可能だが、今回は固定値で試す
-    // scale: '0.9', // 必要であれば追加
+    // 例えば、iPhone SE (375px) で横幅 368px (80*4 + 16*3) は収まるはず
+    // scale: '0.95', // 必要であれば追加
   } : { // PC版のスタイル
     width: `${pcGridContainerWidth}px`,
     height: `${(pcSingleGridHeight * pcNumberOfClones) + (pcGapSize * (pcNumberOfClones - 1))}px`,
