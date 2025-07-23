@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { sweetImages } from '../data/sweets';
 
 interface BackgroundGridProps {
@@ -82,50 +82,6 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
     return allItems;
   }, [isMobile, currentNumRows, currentNumCols]);
 
-  // Intersection Observer 用の ref を管理する Map (モバイル版のみ使用)
-  const imageRefs = useRef(new Map<string, HTMLImageElement>());
-
-  // Intersection Observer のコールバック関数 (モバイル版のみ使用)
-  const handleIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target as HTMLImageElement;
-        if (img && img.dataset.src) {
-          img.src = img.dataset.src;
-          if (img.dataset.srcset) {
-            img.srcset = img.dataset.srcset;
-          }
-          img.removeAttribute('data-src');
-          img.removeAttribute('data-srcset');
-          (entry.target as any)._observer.unobserve(entry.target);
-        }
-      }
-    });
-  }, []);
-
-  // Intersection Observer の設定とクリーンアップ (モバイル版のみ使用)
-  useEffect(() => {
-    if (!isMobile) return; // PC版ではIOを使用しない
-
-    const observer = new IntersectionObserver(handleIntersect, {
-      root: null,
-      // rootMargin をさらに広げ、ビューポート外の広い範囲で読み込みを開始
-      rootMargin: '1000px 1000px 1000px 1000px', // 上下左右1000px手前で読み込み開始
-      threshold: 0,
-    });
-
-    imageRefs.current.forEach(img => {
-      if (img) {
-        observer.observe(img);
-        (img as any)._observer = observer;
-      }
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [handleIntersect, items, isMobile]); // isMobile を依存配列に追加
-
   // メインコンテナのスタイル
   const mainContainerStyle: React.CSSProperties = isMobile ? {
     width: `${mobileGridContainerWidth}px`,
@@ -166,41 +122,35 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
               <div
                 key={`${cloneIndex}-${id}`}
                 // ここが重要: 画像が読み込まれるまで親divの背景色を表示し、画像とdivのサイズを合わせる
-                className={`rounded-lg bg-gray-800 shadow-lg flex items-center justify-center`}
+                // モバイル版では背景画像として設定し、imgタグは使用しない
+                className={`rounded-lg shadow-lg flex items-center justify-center`}
                 style={{
                   width: `${currentItemWidth}px`,
                   height: `${currentItemHeight}px`,
-                }}
+                  // モバイル版のみ背景画像として設定
+                  backgroundImage: isMobile ? `url(${sweetData.webp})` : 'none',
+                  backgroundSize: 'cover', // divいっぱいに画像を拡大縮小
+                  backgroundPosition: 'center', // 画像を中央に配置
+                  backgroundRepeat: 'no-repeat', // 画像を繰り返さない
+                  backgroundColor: isMobile ? 'transparent' : 'bg-gray-800', // モバイルでは背景色を透明に
+                } as React.CSSProperties}
               >
-                {sweetData && (
+                {!isMobile && sweetData && ( // PC版のみimgタグを使用
                   <picture>
-                    <source 
-                      srcSet={isMobile ? undefined : sweetData.webp} // PC版のみsrcSetを直接指定
-                      data-srcset={isMobile ? sweetData.webp : undefined} // モバイル版のみdata-srcsetを使用
-                      type="image/webp" 
-                    />
+                    <source srcSet={sweetData.webp} type="image/webp" />
                     <img
-                      // モバイル版は透明なGIFプレースホルダー、PC版は直接webpパス
-                      src={isMobile ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : sweetData.webp}
-                      // モバイル版のみdata-srcを使用
-                      data-src={isMobile ? sweetData.webp : undefined}
+                      src={sweetData.webp} // 直接webpパスを指定
                       alt={sweetData.alt}
                       className="w-full h-full object-cover rounded-lg"
-                      // モバイル版はIOで制御するためloading属性なし、PC版はlazy
-                      loading={isMobile ? undefined : 'lazy'} 
-                      decode="async" 
-                      ref={el => {
-                        // モバイル版のみrefをセット
-                        if (isMobile) {
-                          if (el) {
-                            imageRefs.current.set(`${cloneIndex}-${id}`, el);
-                          } else {
-                            imageRefs.current.delete(`${cloneIndex}-${id}`);
-                          }
-                        }
-                      }}
+                      loading="lazy" // PC版はlazy
+                      decode="async" // 非同期デコードは両方で維持
                     />
                   </picture>
+                )}
+                {isMobile && ( // モバイル版で画像読み込み失敗時のaltテキスト表示を防ぐため、imgタグを削除
+                  // 画像が背景画像として設定されるため、altテキストは表示されません。
+                  // 必要であれば、アクセシビリティのためにaria-labelなどをdivに追加することを検討してください。
+                  <div className="sr-only">{sweetData.alt}</div> // スクリーンリーダー向けにaltテキストを保持
                 )}
               </div>
             ))}
