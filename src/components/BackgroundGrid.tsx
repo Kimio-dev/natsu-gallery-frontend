@@ -41,7 +41,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   // --- モバイル版の設定 ---
   const mobileNumRows = 5; // 20枚の画像を表示するために調整 (4列 * 5行 = 20)
   const mobileNumCols = 4;
-  const mobileItemWidth = 80;  // 横80px
+  const mobileItemWidth = 160;  // 横160px
   const mobileItemHeight = 240; // 縦240px
   const mobileGapSize = 16; // モバイル向けにギャップを小さく調整
 
