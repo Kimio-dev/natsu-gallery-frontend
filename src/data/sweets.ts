@@ -2,7 +2,7 @@ export interface SweetImage {
   id: number;
   name: string;
   webp: string;
-  jpg: string; // <-- 型定義は残す
+  
   alt: string;
   createdAt: string;
   difficulty: string;
@@ -11,7 +11,7 @@ export interface SweetImage {
 }
 
 export const sweetImages: SweetImage[] = [
-  { id: 1, name: 'チーズケーキ', webp: '/images/sweets/1-1.webp', jpg: '/images/sweets/1-2.jpg', alt: 'チーズケーキ', createdAt: '3時間', difficulty: '★★',
+  { id: 1, name: 'チーズケーキ', webp: '/images/sweets/1-1.webp',  alt: 'チーズケーキ', createdAt: '3時間', difficulty: '★★',
     ingredients: [
       'クリームチーズ 200g', '砂糖 80g', '卵 2個', '生クリーム 200ml', '薄力粉 大さじ2', 'レモン汁 大さじ1', 'ビスケット 100g', '溶かしバター 50g'
     ],
@@ -23,7 +23,7 @@ export const sweetImages: SweetImage[] = [
       '粗熱を取り、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 2, name: '抹茶プリン', webp: '/images/sweets/2-1.webp', jpg: '/images/sweets/2-2.jpg', alt: '抹茶プリン', createdAt: '1.5時間', difficulty: '★',
+  { id: 2, name: '抹茶プリン', webp: '/images/sweets/2-1.webp', alt: '抹茶プリン', createdAt: '1.5時間', difficulty: '★',
     ingredients: [
       '牛乳 300ml', '生クリーム 100ml', '砂糖 50g', '抹茶パウダー 大さじ1', 'ゼラチン 5g', '水 大さじ2'
     ],
@@ -35,7 +35,7 @@ export const sweetImages: SweetImage[] = [
       '器に流し入れ、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 3, name: '抹茶パフェ', webp: '/images/sweets/3-1.webp', jpg: '/images/sweets/3-2.jpg', alt: '抹茶パフェ', createdAt: '2時間', difficulty: '★★',
+  { id: 3, name: '抹茶パフェ', webp: '/images/sweets/3-1.webp', alt: '抹茶パフェ', createdAt: '2時間', difficulty: '★★',
     ingredients: [
       '抹茶アイス 適量', 'ホイップクリーム 適量', 'あんこ 適量', '白玉 適量', '抹茶シロップ 適量', 'コーンフレーク 適量'
     ],
@@ -46,7 +46,7 @@ export const sweetImages: SweetImage[] = [
       'お好みでフルーツや追加のトッピングを添える。'
     ]
   },
-  { id: 4, name: 'シャインマスカットのタルト', webp: '/images/sweets/4-1.webp', jpg: '/images/sweets/4-2.jpg', alt: 'シャインマスカットとマスカットのタルト', createdAt: '4時間', difficulty: '★★★',
+  { id: 4, name: 'シャインマスカットのタルト', webp: '/images/sweets/4-1.webp', alt: 'シャインマスカットとマスカットのタルト', createdAt: '4時間', difficulty: '★★★',
     ingredients: [
       'タルト生地 1枚', 'カスタードクリーム 適量', 'シャインマスカット 1房', '巨峰 1房', 'ゼラチン 2g', '水 大さじ1'
     ],
@@ -59,7 +59,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫でしっかり冷やし固める。'
     ]
   },
-  { id: 5, name: 'チーズケーキ2', webp: '/images/sweets/5-1.webp', jpg: '/images/sweets/5-2.jpg', alt: 'チーズケーキ2', createdAt: '3.5時間', difficulty: '★★',
+  { id: 5, name: 'チーズケーキ2', webp: '/images/sweets/5-1.webp',  alt: 'チーズケーキ2', createdAt: '3.5時間', difficulty: '★★',
     ingredients: [
       'クリームチーズ 250g', '砂糖 90g', '卵 2個', 'サワークリーム 100g', 'レモン汁 大さ1', 'ココアクッキー 80g', '溶かしバター 40g'
     ],
@@ -71,7 +71,7 @@ export const sweetImages: SweetImage[] = [
       '焼き上がったら冷まし、冷蔵庫で一晩冷やす。'
     ]
   },
-  { id: 6, name: '栗のタルト', webp: '/images/sweets/6-1.webp', jpg: '/images/sweets/6-2.jpg', alt: '栗のタルト', createdAt: '4.5時間', difficulty: '★★★',
+  { id: 6, name: '栗のタルト', webp: '/images/sweets/6-1.webp', alt: '栗のタルト', createdAt: '4.5時間', difficulty: '★★★',
     ingredients: [
       'タルト生地 1枚', 'アーモンドクリーム 適量', '栗の甘露煮 適量', '生クリーム 200ml', '砂糖 20g', 'マロンクリーム 100g'
     ],
@@ -83,7 +83,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫で冷やして完成。'
     ]
   },
-  { id: 7, name: 'シャインマスカットケーキ', webp: '/images/sweets/7-1.webp', jpg: '/images/sweets/7-2.jpg', alt: 'シャインマスカットケーキ', createdAt: '3時間', difficulty: '★★',
+  { id: 7, name: 'シャインマスカットケーキ', webp: '/images/sweets/7-1.webp', alt: 'シャインマスカットケーキ', createdAt: '3時間', difficulty: '★★',
     ingredients: [
       'スポンジケーキ 1台', '生クリーム 400ml', '砂糖 40g', 'シャインマスカット 1.5房', 'ミント 適量'
     ],
@@ -95,7 +95,7 @@ export const sweetImages: SweetImage[] = [
       '上にシャインマスカットとミントを飾り付ける。'
     ]
   },
-  { id: 8, name: 'みかんゼリー', webp: '/images/sweets/8-1.webp', jpg: '/images/sweets/8-2.jpg', alt: 'みかんゼリー', createdAt: '1時間', difficulty: '★',
+  { id: 8, name: 'みかんゼリー', webp: '/images/sweets/8-1.webp', alt: 'みかんゼリー', createdAt: '1時間', difficulty: '★',
     ingredients: [
       'みかん缶詰 1缶', 'みかんジュース 200ml', '砂糖 20g', 'ゼラチン 5g', '水 大さじ2'
     ],
@@ -107,7 +107,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 9, name: 'イチゴプリン', webp: '/images/sweets/9-1.webp', jpg: '/images/sweets/9-2.jpg', alt: 'イチゴプリン', createdAt: '1.5時間', difficulty: '★',
+  { id: 9, name: 'イチゴプリン', webp: '/images/sweets/9-1.webp',  alt: 'イチゴプリン', createdAt: '1.5時間', difficulty: '★',
     ingredients: [
       '牛乳 300ml', '生クリーム 100ml', '砂糖 60g', 'いちご 100g', 'ゼラチン 5g', '水 大さじ2'
     ],
@@ -119,7 +119,7 @@ export const sweetImages: SweetImage[] = [
       '器に流し入れ、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 10, name: '桜ゼリー', webp: '/images/sweets/10-1.webp', jpg: '/images/sweets/10-2.jpg', alt: '桜ゼリー', createdAt: '1時間', difficulty: '★',
+  { id: 10, name: '桜ゼリー', webp: '/images/sweets/10-1.webp',  alt: '桜ゼリー', createdAt: '1時間', difficulty: '★',
     ingredients: [
       '水 300ml', '砂糖 40g', '桜リキュール 大さじ1', '食用色素(赤) 少々', 'ゼラチン 5g', '水 大さじ2', '塩漬け桜 適量'
     ],
@@ -131,7 +131,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 11, name: 'シフォンケーキ', webp: '/images/sweets/11-1.webp', jpg: '/images/sweets/11-2.jpg', alt: 'シフォンケーキ', createdAt: '2.5時間', difficulty: '★★',
+  { id: 11, name: 'シフォンケーキ', webp: '/images/sweets/11-1.webp', alt: 'シフォンケーキ', createdAt: '2.5時間', difficulty: '★★',
     ingredients: [
       '卵 4個', '砂糖 80g', '薄力粉 80g', '牛乳 60ml', 'サラダ油 40ml', 'バニラエッセンス 少々'
     ],
@@ -143,7 +143,7 @@ export const sweetImages: SweetImage[] = [
       '焼き上がったら逆さにして冷ます。'
     ]
   },
-  { id: 12, name: '抹茶ロールケーキ', webp: '/images/sweets/12-1.webp', jpg: '/images/sweets/12-2.jpg', alt: '抹茶ロールケーキ', createdAt: '3時間', difficulty: '★★',
+  { id: 12, name: '抹茶ロールケーキ', webp: '/images/sweets/12-1.webp',  alt: '抹茶ロールケーキ', createdAt: '3時間', difficulty: '★★',
     ingredients: [
       '卵 3個', '砂糖 70g', '薄力粉 60g', '抹茶パウダー 10g', '牛乳 30ml', '生クリーム 200ml', '砂糖 20g'
     ],
@@ -155,7 +155,7 @@ export const sweetImages: SweetImage[] = [
       '生地が生クリームを塗って巻き、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 13, name: '苺タルト', webp: '/images/sweets/13-1.webp', jpg: '/images/sweets/13-2.jpg', alt: '苺タルト', createdAt: '3.5時間', difficulty: '★★★',
+  { id: 13, name: '苺タルト', webp: '/images/sweets/13-1.webp', alt: '苺タルト', createdAt: '3.5時間', difficulty: '★★★',
     ingredients: [
       'タルト生地 1枚', 'カスタードクリーム 適量', 'いちご 1パック', 'ナパージュ 適量'
     ],
@@ -168,7 +168,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫でしっかり冷やし固める。'
     ]
   },
-  { id: 14, name: '桜ムース', webp: '/images/sweets/14-1.webp', jpg: '/images/sweets/14-2.jpg', alt: '桜ムース', createdAt: '2時間', difficulty: '★★',
+  { id: 14, name: '桜ムース', webp: '/images/sweets/14-1.webp', alt: '桜ムース', createdAt: '2時間', difficulty: '★★',
     ingredients: [
       '生クリーム 200ml', '牛乳 100ml', '砂糖 50g', '桜の葉パウダー 小さじ1', 'ゼラチン 5g', '水 大さじ2'
     ],
@@ -181,7 +181,7 @@ export const sweetImages: SweetImage[] = [
       '器に流し入れ、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 15, name: 'モモのケーキ', webp: '/images/sweets/15-1.webp', jpg: '/images/sweets/15-2.jpg', alt: 'モモのケーキ', createdAt: '3時間', difficulty: '★★',
+  { id: 15, name: 'モモのケーキ', webp: '/images/sweets/15-1.webp', alt: 'モモのケーキ', createdAt: '3時間', difficulty: '★★',
     ingredients: [
       'スポンジケーキ 1台', '生クリーム 300ml', '砂糖 30g', '桃缶詰 1缶', 'ミント 適量'
     ],
@@ -193,7 +193,7 @@ export const sweetImages: SweetImage[] = [
       '上に桃とミントを飾り付ける。'
     ]
   },
-  { id: 16, name: 'チーズケーキ3', webp: '/images/sweets/16-1.webp', jpg: '/images/sweets/16-2.jpg', alt: 'チーズケーキ3', createdAt: '3時間', difficulty: '★★',
+  { id: 16, name: 'チーズケーキ3', webp: '/images/sweets/16-1.webp',alt: 'チーズケーキ3', createdAt: '3時間', difficulty: '★★',
     ingredients: [
       'クリームチーズ 200g', '砂糖 80g', '卵 2個', '生クリーム 200ml', '薄力粉 大さじ2', 'レモン汁 大さじ1', 'オレオ 10枚', '溶かしバター 40g'
     ],
@@ -205,7 +205,7 @@ export const sweetImages: SweetImage[] = [
       '粗熱を取り、冷蔵庫で冷やし固める。'
     ]
   },
-  { id: 17, name: '栗のタルト2', webp: '/images/sweets/17-1.webp', jpg: '/images/sweets/17-2.jpg', alt: '栗のタルト2', createdAt: '4.5時間', difficulty: '★★★',
+  { id: 17, name: '栗のタルト2', webp: '/images/sweets/17-1.webp', alt: '栗のタルト2', createdAt: '4.5時間', difficulty: '★★★',
     ingredients: [
       'タルト生地 1枚', 'カスタードクリーム 適量', '渋皮煮栗 適量', 'ラム酒漬けレーズン 適量', '粉砂糖 適量'
     ],
@@ -218,7 +218,7 @@ export const sweetImages: SweetImage[] = [
       '冷蔵庫で冷やして完成。'
     ]
   },
-  { id: 18, name: 'イチゴケーキ', webp: '/images/sweets/18-1.webp', jpg: '/images/sweets/18-2.jpg', alt: 'イチゴケーキ', createdAt: '2.5時間', difficulty: '★★',
+  { id: 18, name: 'イチゴケーキ', webp: '/images/sweets/18-1.webp',  alt: 'イチゴケーキ', createdAt: '2.5時間', difficulty: '★★',
     ingredients: [
       'スポンジケーキ 1台', '生クリーム 400ml', '砂糖 40g', 'いちご 1パック', 'アラザン 適量'
     ],
@@ -230,7 +230,7 @@ export const sweetImages: SweetImage[] = [
       'いちごをアラザンで飾り付ける。'
     ]
   },
-  { id: 19, name: 'ミルクレープ', webp: '/images/sweets/19-1.webp', jpg: '/images/sweets/19-2.jpg', alt: 'ミルクレープ', createdAt: '4時間', difficulty: '★★★',
+  { id: 19, name: 'ミルクレープ', webp: '/images/sweets/19-1.webp', alt: 'ミルクレープ', createdAt: '4時間', difficulty: '★★★',
     ingredients: [
       'クレープ生地 20枚', '生クリーム 400ml', '砂糖 40g', 'カスタードクリーム 適量', 'フルーツ（いちご、キウイなど）適量'
     ],

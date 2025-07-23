@@ -8,15 +8,13 @@
 
     <!--
       主要な画像をプリロードして、初期表示のパフォーマンスを向上させます。
-      sweetImagesデータから、最初の数枚のWebPとJPGパスを指定してください。
+      sweetImagesデータから、最初の数枚のWebPパスを指定してください。
+      （JPGは削除したので、webpのみでOKです）
       例として最初の3枚の画像をプリロードします。
     -->
     <link rel="preload" href="/images/sweets/1-1.webp" as="image" type="image/webp">
-    <link rel="preload" href="/images/sweets/1-2.jpg" as="image" type="image/jpeg">
     <link rel="preload" href="/images/sweets/2-1.webp" as="image" type="image/webp">
-    <link rel="preload" href="/images/sweets/2-2.jpg" as="image" type="image/jpeg">
     <link rel="preload" href="/images/sweets/3-1.webp" as="image" type="image/webp">
-    <link rel="preload" href="/images/sweets/3-2.jpg" as="image" type="image/jpeg">
 
   </head>
   <body>
