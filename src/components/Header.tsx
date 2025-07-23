@@ -57,7 +57,7 @@ const Header: React.FC = () => {
       {/* サイトロゴ/トップページへのリンク */}
       <div className="text-2xl font-bold text-gray-900">
         <Link to="/" className="hover:text-pink-700 transition-colors duration-200">
-          NATSU_GARELLY
+          NATSU_GALLERY
         </Link>
       </div>
 
