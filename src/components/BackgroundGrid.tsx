@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useMemo, useRef, useEffect, useCallback, useState } from 'react'; // useState を追加
 import { sweetImages } from '../data/sweets';
 
 interface BackgroundGridProps {
@@ -89,6 +89,27 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
     };
   }, [handleIntersect, items]);
 
+  // 画面幅を監視して、3D変換を適用するかどうかを決定
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      // 768px (md breakpoint) 未満をモバイルと判断
+      setIsMobile(window.innerWidth < 768); 
+    };
+
+    checkMobile(); // 初期ロード時にチェック
+    window.addEventListener('resize', checkMobile); // リサイズ時にチェック
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  const transformStyle = isMobile 
+    ? 'none' // モバイルでは3D変換を無効化
+    : 'rotateY(-20deg) rotateX(45deg)'; // PCでは3D変換を適用
+
   return (
     <div className={`fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden perspective-1000 ${className || ''}`}>
       <div
@@ -97,7 +118,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
           width: `${gridContainerWidth}px`,
           height: `${singleGridHeight}px`, 
           transformStyle: 'preserve-3d',
-          transform: 'rotateY(-20deg) rotateX(45deg)', 
+          transform: transformStyle, // レスポンシブなtransformを適用
           transformOrigin: 'center center',
         } as React.CSSProperties}
       >
@@ -129,6 +150,10 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
                       data-src={sweetData.webp}
                       alt={sweetData.alt}
                       className="w-full h-full object-cover rounded-lg"
+                      // loading="eager" を試すことで、Intersection Observer を待たずに即座に読み込みを試みる
+                      // ただし、パフォーマンスへの影響が大きい可能性があるので、慎重にテストしてください。
+                      // これでもダメなら loading="lazy" に戻すか、カスタムIOのrootMarginをさらに広げる。
+                      loading="eager" 
                       decode="async"
                       ref={el => {
                         if (el) {
