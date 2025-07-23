@@ -55,7 +55,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
           height: `${singleGridHeight}px`, 
           transformStyle: 'preserve-3d', // transform-style-3d をスタイルに移動
           // 3D変換の適用: 左斜め20度 (Y軸), 後ろ方向45度 (X軸)
-          transform: 'rotateY(-20deg) rotateX(-45deg)', 
+          transform: 'rotateY(-20deg) rotateX(45deg)', 
           // 画面中央に配置するため、必要に応じて調整
           // top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotateY(-20deg) rotateX(-45deg)',
           // ただし、親のflex-boxで中央寄せされているので、transformのtranslateは不要
