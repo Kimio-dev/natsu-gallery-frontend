@@ -19,7 +19,7 @@ const SweetDetailSection: React.FC<SweetDetailSectionProps> = ({ sweet }) => {
             <picture>
               {sweet.webp && <source srcSet={sweet.webp} type="image/webp" />}
               <img
-                src={sweet.jpg || sweet.webp}
+                src={sweet.webp}
                 alt={sweet.alt}
                 className="w-full h-full object-cover"
                 loading="lazy"
