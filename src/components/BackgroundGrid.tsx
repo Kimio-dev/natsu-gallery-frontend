@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'; // useRef, useEffect, useCallback を削除
+import React, { useMemo } from 'react';
 import { sweetImages } from '../data/sweets';
 
 interface BackgroundGridProps {
@@ -12,44 +12,56 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
   const itemHeight = 320;
   const gapSize = 56;
 
+  // 単一のグリッドのみを表示するため、クローン数は1に固定
+  const numberOfClones = 1; 
+
+  // グリッド全体の幅と高さ
   const singleGridHeight = numRows * itemHeight + (numRows - 1) * gapSize;
   const gridContainerWidth = numCols * itemWidth + (numCols - 1) * gapSize;
 
-  // アニメーションのクローン数は5のまま維持（DOM要素数削減のため）
-  const numberOfClones = 1; 
-  const animationScrollHeight = singleGridHeight + gapSize; 
-
   // グリッドアイテムのデータを準備
+  // sweetImagesの全画像をグリッドに配置
   const items = useMemo(() => {
-    const totalItemsPerGrid = numRows * numCols;
     const allItems = [];
-    for (let i = 0; i < totalItemsPerGrid; i++) {
-      const sweet = sweetImages[i % sweetImages.length];
+    // sweetImagesの全19枚の画像をitemsに格納
+    for (let i = 0; i < sweetImages.length; i++) {
+      const sweet = sweetImages[i];
       allItems.push({
         id: i,
         sweetData: sweet,
       });
     }
+    // グリッドが20マスなので、最後の1マスは最初の画像を繰り返すか、空にするか。
+    // 今回は、グリッドのサイズに合わせて画像を配置し、余ったマスはそのままにする（背景の灰色グリッドが見える）
+    // または、sweetImages.lengthがnumRows * numColsより少ない場合、
+    // 残りのマスは表示されないか、またはデフォルトの背景色（bg-gray-800）が表示されます。
+    // ここでは、sweetImagesの全画像を使い切るようにします。
+    // 必要であれば、グリッドのマス数に合わせて画像を繰り返すことも可能です。
+    // 例: for (let i = 0; i < numRows * numCols; i++) { const sweet = sweetImages[i % sweetImages.length]; ... }
+    // しかし、ユーザーの要望は「デフォルトで全グリッドを画面に表示」なので、
+    // 全てのユニークな画像を一度表示し、余りがあればグリッドの背景色が表示される形が自然です。
     return allItems;
-  }, [numRows, numCols]);
-
-  const baseSpeedPer100Px = 25;
-  const animationDuration = `${(animationScrollHeight / 100) * baseSpeedPer100Px}s`; 
-  const initialAnimationDelay = `0s`; 
+  }, []);
 
   return (
+    // fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden perspective-1000 は維持
     <div className={`fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden perspective-1000 ${className || ''}`}>
       <div
-        className="absolute background-grid-animation transform-style-3d"
+        // アニメーション関連のクラスとスタイルを削除し、3D変換を追加
+        className="absolute" // background-grid-animation クラスを削除
         style={{
           width: `${gridContainerWidth}px`,
-          height: `${(singleGridHeight * numberOfClones) + (gapSize * (numberOfClones - 1))}px`,
-          '--animation-duration': animationDuration,
-          '--animation-delay': initialAnimationDelay,
-          '--scroll-height': `${animationScrollHeight}px`,
-          willChange: 'transform',
+          // numberOfClones が1なので、単一グリッドの高さ
+          height: `${singleGridHeight}px`, 
+          transformStyle: 'preserve-3d', // transform-style-3d をスタイルに移動
+          // 3D変換の適用: 左斜め20度 (Y軸), 後ろ方向45度 (X軸)
+          transform: 'rotateY(-20deg) rotateX(-45deg)', 
+          // 画面中央に配置するため、必要に応じて調整
+          // top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotateY(-20deg) rotateX(-45deg)',
+          // ただし、親のflex-boxで中央寄せされているので、transformのtranslateは不要
         } as React.CSSProperties}
       >
+        {/* numberOfClones が1なので、ループは1回のみ */}
         {Array.from({ length: numberOfClones }).map((_, cloneIndex) => (
           <div
             key={cloneIndex}
@@ -58,7 +70,8 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
               gridTemplateColumns: `repeat(${numCols}, ${itemWidth}px)`,
               gridTemplateRows: `repeat(${numRows}, ${itemHeight}px)`,
               gap: `${gapSize}px`,
-              marginBottom: cloneIndex < numberOfClones - 1 ? `${gapSize}px` : '0px',
+              // クローンが1つなのでmarginBottomは不要
+              marginBottom: '0px', 
             }}
           >
             {items.map(({ id, sweetData }) => (
@@ -75,7 +88,7 @@ const BackgroundGrid: React.FC<BackgroundGridProps> = ({ className }) => {
                     {/* source タグの srcset はそのまま */}
                     <source srcSet={sweetData.webp} type="image/webp" />
                     <img
-                      // src を実際のwebpパスに固定 (jpgフォールバックはデータから削除したため)
+                      // src を実際のwebpパスに固定
                       src={sweetData.webp} 
                       alt={sweetData.alt}
                       className="w-full h-full object-cover rounded-lg"
