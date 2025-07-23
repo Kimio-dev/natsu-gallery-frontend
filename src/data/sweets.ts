@@ -1,15 +1,13 @@
-// src/data/sweets.ts
-
 export interface SweetImage {
   id: number;
   name: string;
   webp: string;
-  jpg: string;
+  jpg: string; // <-- 型定義は残す
   alt: string;
   createdAt: string;
   difficulty: string;
   ingredients: string[];
-  process: string[];     // 作成工程を文字列の配列で追加
+  process: string[];
 }
 
 export const sweetImages: SweetImage[] = [
@@ -18,11 +16,11 @@ export const sweetImages: SweetImage[] = [
       'クリームチーズ 200g', '砂糖 80g', '卵 2個', '生クリーム 200ml', '薄力粉 大さじ2', 'レモン汁 大さじ1', 'ビスケット 100g', '溶かしバター 50g'
     ],
     process: [
-      'ビスケットを砕き、溶かしバターと混ぜて型に敷き詰める。', // '1. ' を削除
-      'クリームチーズを室温に戻し、砂糖と混ぜる。',          // '2. ' を削除
-      '卵、生クリーム、薄力粉、レモン汁を加えてよく混ぜる。', // '3. ' を削除
-      '型に流し込み、170℃に予熱したオーブンで45分焼く。',    // '4. ' を削除
-      '粗熱を取り、冷蔵庫で冷やし固める。'                    // '5. ' を削除
+      'ビスケットを砕き、溶かしバターと混ぜて型に敷き詰める。',
+      'クリームチーズを室温に戻し、砂糖と混ぜる。',
+      '卵、生クリーム、薄力粉、レモン汁を加えてよく混ぜる。',
+      '型に流し込み、170℃に予熱したオーブンで45分焼く。',
+      '粗熱を取り、冷蔵庫で冷やし固める。'
     ]
   },
   { id: 2, name: '抹茶プリン', webp: '/images/sweets/2-1.webp', jpg: '/images/sweets/2-2.jpg', alt: '抹茶プリン', createdAt: '1.5時間', difficulty: '★',
